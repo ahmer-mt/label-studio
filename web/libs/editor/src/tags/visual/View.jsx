@@ -68,7 +68,7 @@ const TagAttrs = types.model({
   classname: types.optional(types.string, ""),
   display: types.optional(types.string, "block"),
   style: types.maybeNull(types.string),
-  idattr: types.optional(types.string, ""),
+  idattr: types.optional(types.string, "")
 });
 
 const Model = types
@@ -107,6 +107,7 @@ const Model = types
       "image",
       "hypertext",
       "richtext",
+      "pdf",
       "timeseries",
       "audioplus",
       "list",
@@ -121,17 +122,23 @@ const Model = types
       "paragraphlabels",
       "video",
       "videorectangle",
-      "timelinelabels",
-    ]),
+      "timelinelabels"
+    ])
   })
-  .views((self) => ({
+  .views(self => ({
     // Indicates that it could exist without information about objects, taskData and regions
     get isIndependent() {
       return true;
-    },
+    }
   }));
 
-const ViewModel = types.compose("ViewModel", TagAttrs, Model, VisibilityMixin, AnnotationMixin);
+const ViewModel = types.compose(
+  "ViewModel",
+  TagAttrs,
+  Model,
+  VisibilityMixin,
+  AnnotationMixin
+);
 
 const HtxView = observer(({ item }) => {
   let style = {};

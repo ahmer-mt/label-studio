@@ -20,28 +20,26 @@ export const ModelVersionSelector = ({
   useEffect(() => {
     setVersion(project?.[valueName] || null);
   }, [project?.[valueName], versions]);
-
-  const fetchMLVersions = useCallback(async () => {
+  const callback = async () => {
     const pk = project?.id;
-
     if (!pk) return;
 
     const modelVersions = await api.callApi(apiName, {
       params: {
         pk,
         extended: true,
-        include_live_models: true,
-      },
+        include_live_models: true
+      }
     });
 
     if (modelVersions?.live?.length > 0) {
-      const liveModels = modelVersions.live.map((item) => {
+      const liveModels = modelVersions.live.map(item => {
         const label = `${item.title} (${item.readable_state})`;
 
         return {
           group: "Models",
           value: item.title,
-          label,
+          label
         };
       });
 
@@ -49,13 +47,13 @@ export const ModelVersionSelector = ({
     }
 
     if (modelVersions?.static?.length > 0) {
-      const staticModels = modelVersions.static.map((item) => {
+      const staticModels = modelVersions.static.map(item => {
         const label = `${item.model_version} (${item.count} predictions)`;
 
         return {
           group: "Predictions",
           value: item.model_version,
-          label,
+          label
         };
       });
 
@@ -67,6 +65,9 @@ export const ModelVersionSelector = ({
     }
 
     setLoading(false);
+  };
+  const fetchMLVersions = useCallback(() => {
+    callback();
   }, [project?.id, apiName]);
 
   useEffect(fetchMLVersions, [fetchMLVersions]);
@@ -80,9 +81,15 @@ export const ModelVersionSelector = ({
             name={name}
             disabled={!versions.length && !models.length}
             value={version}
-            onChange={(e) => setVersion(e.target.value)}
+            onChange={e => setVersion(e.target.value)}
             options={[...models, ...versions]}
-            placeholder={loading ? "Loading ..." : placeholder ? placeholder : "Please select model or predictions"}
+            placeholder={
+              loading
+                ? "Loading ..."
+                : placeholder
+                ? placeholder
+                : "Please select model or predictions"
+            }
             {...props}
           />
         </div>

@@ -10,6 +10,7 @@ import { AudioRegionModel } from "./AudioRegion";
 import { PolygonRegionModel } from "./PolygonRegion";
 import { EllipseRegionModel } from "./EllipseRegion";
 import { RichTextRegionModel } from "./RichTextRegion";
+import { PDFRegionModel } from "../tags/object/pdf";
 import { BrushRegionModel } from "./BrushRegion";
 import { TimelineRegionModel } from "./TimelineRegion";
 import { TimeSeriesRegionModel } from "./TimeSeriesRegion";
@@ -24,22 +25,24 @@ const ClassificationArea = types.compose(
   AreaMixin,
   types
     .model({
-      object: types.late(() => types.reference(types.union(...Registry.objectTypes()))),
+      object: types.late(() =>
+        types.reference(types.union(...Registry.objectTypes()))
+      ),
       // true only for global classifications
-      classification: true,
+      classification: true
     })
-    .views((self) => ({
+    .views(self => ({
       get supportSuggestions() {
         return false;
       },
       // it's required in some contexts when it's treated as a region
       get type() {
         return "";
-      },
+      }
     }))
     .actions(() => ({
-      serialize: () => ({}),
-    })),
+      serialize: () => ({})
+    }))
 );
 
 const Area = types.union(
@@ -61,6 +64,7 @@ const Area = types.union(
       // we have to use current config to detect Object tag by name
       const tag = window.Htx.annotationStore.names.get(objectName);
       // provide value to detect Area by data
+      // debugger;
       const available = Registry.getAvailableAreas(tag.type, sn);
       // union of all available Areas for this Object type
 
@@ -71,8 +75,8 @@ const Area = types.union(
       }
 
       if (!available.length) return ClassificationArea;
-      return types.union(...available, ClassificationArea);
-    },
+      return types.union(...available);
+    }
   },
   AudioRegionModel,
   ParagraphsRegionModel,
@@ -80,12 +84,13 @@ const Area = types.union(
   TimeSeriesRegionModel,
   RectRegionModel,
   RichTextRegionModel,
+  PDFRegionModel,
   KeyPointRegionModel,
   EllipseRegionModel,
   PolygonRegionModel,
   BrushRegionModel,
   VideoRectangleRegionModel,
-  ClassificationArea,
+  ClassificationArea
 );
 
 export default Area;

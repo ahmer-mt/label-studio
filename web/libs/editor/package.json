@@ -34,6 +34,7 @@
     "react-dom": "17.0.2",
     "react-konva": "^17.0.2-0",
     "react-konva-utils": "^0.2.0",
+    "react-pdf-highlighter": "6.1.0",
     "react-virtualized-auto-sizer": "^1.0.20",
     "react-window": "^1.8.9",
     "sanitize-html": "^2.12.1",

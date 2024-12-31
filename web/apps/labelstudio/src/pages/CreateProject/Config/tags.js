@@ -5,25 +5,28 @@ const OBJECTS = {
       strokeWidth: {
         title: "Width of region borders",
         type: Number,
-        param: ($obj, value) => $obj.$controls.forEach(($control) => $control.setAttribute("strokeWidth", value)),
-        value: ($obj) => $obj.$controls[0]?.getAttribute("strokeWidth") ?? 1,
+        param: ($obj, value) =>
+          $obj.$controls.forEach($control =>
+            $control.setAttribute("strokeWidth", value)
+          ),
+        value: $obj => $obj.$controls[0]?.getAttribute("strokeWidth") ?? 1
       },
       zoom: {
         title: "Allow image zoom (ctrl+wheel)",
         type: Boolean,
-        param: "zoom",
+        param: "zoom"
       },
       zoomControl: {
         title: "Show controls to zoom in and out",
         type: Boolean,
-        param: "zoomControl",
+        param: "zoomControl"
       },
       rotateControl: {
         title: "Show controls to rotate image",
         type: Boolean,
-        param: "rotateControl",
-      },
-    },
+        param: "rotateControl"
+      }
+    }
   },
   Text: {
     type: "Text",
@@ -32,36 +35,42 @@ const OBJECTS = {
         title: "Select text by words",
         type: Boolean,
         param: ($obj, value) =>
-          value ? $obj.setAttribute("granularity", "word") : $obj.removeAttribute("granularity"),
-        value: ($obj) => $obj.getAttribute("granularity") === "word",
-        when: ($obj) => $obj.$controls.filter((c) => c.tagName.endsWith("Labels")).length > 0,
-      },
-    },
+          value
+            ? $obj.setAttribute("granularity", "word")
+            : $obj.removeAttribute("granularity"),
+        value: $obj => $obj.getAttribute("granularity") === "word",
+        when: $obj =>
+          $obj.$controls.filter(c => c.tagName.endsWith("Labels")).length > 0
+      }
+    }
+  },
+  PDF: {
+    type: "PDF"
   },
   HyperText: {
-    type: "HyperText",
+    type: "HyperText"
   },
   Audio: {
-    type: "Audio",
+    type: "Audio"
   },
   AudioPlus: {
-    type: "Audio",
+    type: "Audio"
   },
   List: {
-    type: "List",
+    type: "List"
   },
   Paragraphs: {
-    type: "Paragraphs",
+    type: "Paragraphs"
   },
   Table: {
-    type: "Table",
+    type: "Table"
   },
   TimeSeries: {
-    type: "TimeSeries",
+    type: "TimeSeries"
   },
   Video: {
-    type: "Video",
-  },
+    type: "Video"
+  }
 };
 
 const Labels = {
@@ -71,7 +80,7 @@ const Labels = {
       title: "Display labels:",
       type: ["bottom", "left", "right", "top"],
       control: true,
-      when: ($tag) => $tag.$object.tagName !== "Video",
+      when: $tag => $tag.$object.tagName !== "Video",
       param: ($control, value) => {
         let $container = $control.parentNode;
         let $labels = $control;
@@ -83,8 +92,11 @@ const Labels = {
         const $obj = $control.$object;
         const inline = ["top", "bottom"].includes(value);
         const reversed = ["top", "left"].includes(value);
-        const direction = (inline ? "column" : "row") + (reversed ? "-reverse" : "");
-        const alreadyApplied = $container.getAttribute("style")?.includes("flex");
+        const direction =
+          (inline ? "column" : "row") + (reversed ? "-reverse" : "");
+        const alreadyApplied = $container
+          .getAttribute("style")
+          ?.includes("flex");
 
         if (!alreadyApplied) {
           $container = $obj.ownerDocument.createElement("View");
@@ -93,9 +105,12 @@ const Labels = {
           $container.appendChild($labels);
         }
         $control.setAttribute("showInline", JSON.stringify(inline));
-        $container.setAttribute("style", `display:flex;align-items:start;gap:8px;flex-direction:${direction}`);
+        $container.setAttribute(
+          "style",
+          `display:flex;align-items:start;gap:8px;flex-direction:${direction}`
+        );
       },
-      value: ($control) => {
+      value: $control => {
         let $container = $control.parentNode;
 
         if ($container.firstChild?.tagName?.toUpperCase() === "FILTER") {
@@ -111,7 +126,7 @@ const Labels = {
         }
         if (direction[1] === "column") return direction[2] ? "top" : "bottom";
         return direction[2] ? "left" : "right";
-      },
+      }
     },
     filter: {
       title: "Add filter for long list of labels",
@@ -139,14 +154,15 @@ const Labels = {
           }
         }
       },
-      value: ($control) => $control.previousElementSibling?.tagName.toUpperCase() === "FILTER",
-    },
-  },
+      value: $control =>
+        $control.previousElementSibling?.tagName.toUpperCase() === "FILTER"
+    }
+  }
 };
 
 const CONTROLS = {
   Labels,
-  RectangleLabels: Labels,
+  RectangleLabels: Labels
 };
 
 const TAGS = { ...OBJECTS, ...CONTROLS };

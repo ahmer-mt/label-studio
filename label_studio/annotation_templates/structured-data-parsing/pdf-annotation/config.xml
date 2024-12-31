@@ -1,0 +1,9 @@
+ <View>
+    <Labels name="label" toName="pdf">
+        <Label value="Person" background="#FF0000" />
+        <Label value="Organization" background="#0000FF" />
+        <Label value="Location" background="#00FF00" />
+        <Label value="Date" background="#FFA500" />
+    </Labels>
+    <PDF name="pdf" value="$url" />
+</View>

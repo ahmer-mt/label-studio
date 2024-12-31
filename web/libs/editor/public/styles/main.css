@@ -123,3 +123,7 @@ body {
 #label-studio {
   height: 100%;
 }
+
+.Highlight__part {
+  cursor: pointer;
+}
